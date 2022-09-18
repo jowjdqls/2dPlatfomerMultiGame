@@ -30,6 +30,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         DisconnectPanel.SetActive(false);
+        StartCoroutine("DestroyBullet");
+        Spawn();
+    }
+
+    IEnumerator DestroyBullet()
+    {
+        yield return new WaitForSeconds(0.2f);
+        foreach(GameObject GO in GameObject.FindGameObjectsWithTag("Bullet")) GO.GetComponent<PhotonView>().RPC("DestroyRPC", RpcTarget.All);
+    }
+
+    //플레이어 복제
+    public void Spawn()
+    {
+        PhotonNetwork.Instantiate("Player", new Vector3(Random.Range(-7f, 22f), 4, 0), Quaternion.identity);
+        RespawnPanel.SetActive(false);
     }
 
     void Update() 
@@ -38,7 +53,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if(Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.IsConnected)
             PhotonNetwork.Disconnect();
     }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
         DisconnectPanel.SetActive(true);
