@@ -61,6 +61,9 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
                 AN.SetTrigger("shot");
             }
         }
+        
+            else if((transform.position - curPos).sqrMagnitude >= 100)transform.position = curPos;
+            else transform.position = Vector3.Lerp(transform.position, curPos, Time.deltaTime*10);
     }
 
     [PunRPC]
@@ -75,6 +78,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
     public void Hit()
     {
         HealthImage.fillAmount -= -0.1f;
+        print("hithithithithithithi");
         if(HealthImage.fillAmount <= 0)
         {
             GameObject.Find("Canvas").transform.Find("RespawnPanel").gameObject.SetActive(true);
