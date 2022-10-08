@@ -46,7 +46,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Spawn()
     {
-        PhotonNetwork.Instantiate("GunMan", new Vector3(Random.Range(-13f, 13f), 4f, 0), Quaternion.identity);
+        PhotonNetwork.Instantiate("Dragon", new Vector3(Random.Range(-13f, 13f), 4f, 0), Quaternion.identity);
         RespawnPanel.SetActive(false);
     }
     public override void OnDisconnected(DisconnectCause cause)
