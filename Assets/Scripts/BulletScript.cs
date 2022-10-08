@@ -22,6 +22,11 @@ public class BulletScript : MonoBehaviourPunCallbacks
             col.GetComponent<GunManScropts>().Hit();
             Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
         }
+        else if(!Pv.IsMine && col.tag == "Dragon" && col.GetComponent<PhotonView>().IsMine)
+        {
+            col.GetComponent<DragonScript>().Hit();
+            Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
+        }
     }
 
     [PunRPC]

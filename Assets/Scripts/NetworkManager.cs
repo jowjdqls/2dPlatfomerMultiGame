@@ -10,6 +10,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public InputField NickNameInput;
     public GameObject DisconnectPanel;
     public GameObject RespawnPanel;
+    public bool GunBtu;
+    public bool DragonBtu;
 
     private void Awake() 
     {
@@ -45,9 +47,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     public void Spawn()
+    {   
+        if(GunBtu == true)
+        {
+            PhotonNetwork.Instantiate("GunMan", new Vector3(Random.Range(-13f, 13f), 4f, 0), Quaternion.identity);
+            RespawnPanel.SetActive(false);
+        }
+        else if(DragonBtu == true)
+        {
+            PhotonNetwork.Instantiate("Dragon", new Vector3(Random.Range(-13, 13f), 4f, 0), Quaternion.identity);
+            RespawnPanel.SetActive(false);
+        }
+    }
+
+    public void GunMan()
     {
-        PhotonNetwork.Instantiate("Dragon", new Vector3(Random.Range(-13f, 13f), 4f, 0), Quaternion.identity);
-        RespawnPanel.SetActive(false);
+        GunBtu = true;
+        DragonBtu = false;
+    }
+
+    public void DragonCh()
+    {
+        GunBtu = false;
+        DragonBtu = true;
     }
     public override void OnDisconnected(DisconnectCause cause)
     {

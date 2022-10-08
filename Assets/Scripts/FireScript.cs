@@ -19,6 +19,11 @@ public class FireScript : MonoBehaviour
             Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
         if(!Pv.IsMine && col.tag == "Player" && col.GetComponent<PhotonView>().IsMine)
         {
+            col.GetComponent<GunManScropts>().Hit();
+            Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
+        }
+        else if(!Pv.IsMine && col.tag == "Dragon" && col.GetComponent<PhotonView>().IsMine)
+        {
             col.GetComponent<DragonScript>().Hit();
             Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
         }
