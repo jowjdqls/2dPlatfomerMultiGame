@@ -97,4 +97,13 @@ public class GunManScropts : MonoBehaviourPunCallbacks, IPunObservable
             HealthImage.fillAmount = (float)stream.ReceiveNext();
         }
     }
+
+    void OnTriggerExit2D(Collider2D other) 
+    {
+        if(other.tag == "CMRange")
+        {
+            GameObject.Find("Canvas").transform.Find("RespawnPanel").gameObject.SetActive(true);
+            Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
+        }    
+    }
 }

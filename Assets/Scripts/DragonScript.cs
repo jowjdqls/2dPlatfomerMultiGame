@@ -14,11 +14,12 @@ public class DragonScript : MonoBehaviourPunCallbacks, IPunObservable
     public PhotonView Pv;
     public Text NickNameText;
     public Image HealthImage;
-
+    
     bool isGround;
     Vector3 curPos;
 
-    private void Awake() {
+    private void Awake() 
+    {
         NickNameText.text = Pv.IsMine ? PhotonNetwork.NickName : Pv.Owner.NickName;
         NickNameText.color = Pv.IsMine ? Color.green : Color.red;
 
@@ -53,6 +54,11 @@ public class DragonScript : MonoBehaviourPunCallbacks, IPunObservable
                 PhotonNetwork.Instantiate("Fire", transform.position + new Vector3(Sr.flipX ? -1.2f : 1.2f, -0.51f, 0), Quaternion.identity)
                 .GetComponent<PhotonView>().RPC("DirRPC", RpcTarget.All, Sr.flipX ? -1 : 1);
                 An.SetTrigger("Dragon_shot");
+            }
+
+            if(Input.GetKeyDown(KeyCode.X))
+            {
+                An.SetTrigger("Dragon_kick");
             }
         }
         else if((transform.position - curPos).sqrMagnitude >= 100) transform.position = curPos;
@@ -95,4 +101,21 @@ public class DragonScript : MonoBehaviourPunCallbacks, IPunObservable
             HealthImage.fillAmount = (float)stream.ReceiveNext();
         }
     }
+
+    void OnTriggerExit2D(Collider2D other) 
+    {
+        if(other.tag == "CMRange")
+        {
+            GameObject.Find("Canvas").transform.Find("RespawnPanel").gameObject.SetActive(true);
+            Pv.RPC("DestroyRPC", RpcTarget.AllBuffered);
+        }    
+    }
+
+    /*void OnTriggerEnter2D(Collider2D other) 
+    {
+        if(!Pv.IsMine && other.tag == "Player" && other.GetComponent<PhotonView>().IsMine)
+        {
+            other.GetComponent<GunManScropts>().Hit();
+        }
+    }*/
 }

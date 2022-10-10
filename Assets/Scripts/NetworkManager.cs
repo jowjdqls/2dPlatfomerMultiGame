@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Image DragonImgae;
     public bool GunBtu;
     public bool DragonBtu;
+    public Vector3[] SpawnPos;
 
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
@@ -38,6 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if(num == -2)  --currentPage;
         else if(num == -1) ++currentPage;
         else PhotonNetwork.JoinRoom(myList[multiple + num].Name);
+            
         MyListRenewal();
     }
 
@@ -82,10 +84,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
-    /*{ 로비 전
-        PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions {MaxPlayers = 2}, null);
-    }*/
 
     public override void OnJoinedLobby()
     {
@@ -94,14 +92,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
         WelcomeText.text = PhotonNetwork.LocalPlayer.NickName + "님 환영합니다";
     }
-
-    //로비 전
-    /*public override void OnJoinedRoom()
-    {
-        DisconnectPanel.SetActive(false);
-        StartCoroutine("DestroyBullet");
-        Spawn();
-    }*/
 
     IEnumerator DestroyBullet()
     {
@@ -118,14 +108,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Spawn()
     {   
         DisconnectPanel.SetActive(false);
+        int i = Random.Range(0, 5);
         if(GunBtu == true)
         {
-            PhotonNetwork.Instantiate("GunMan", new Vector3(Random.Range(-13f, 13f), 4f, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate("GunMan", SpawnPos[i], Quaternion.identity);
             RespawnPanel.SetActive(false);
         }
         else if(DragonBtu == true)
         {
-            PhotonNetwork.Instantiate("Dragon", new Vector3(Random.Range(-13, 13f), 4f, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate("Dragon", SpawnPos[i], Quaternion.identity);
             RespawnPanel.SetActive(false);
         }
     }
