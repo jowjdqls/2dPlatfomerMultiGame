@@ -149,6 +149,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         DisconnectPanel.SetActive(true);
         LobbyPanel.SetActive(false);
-        Invoke("Spawn", 3f);
+        if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            Invoke("Spawn", 3f);
+        }
+    }
+
+    public override void OnPlayerEnteredRoom(Player player) {
+        Debug.LogError("PlayerEntered");
+        if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            Invoke("Spawn", 3f);
+        }
     }
 }
